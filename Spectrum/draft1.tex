@@ -1,0 +1,231 @@
+\documentclass[a4paper]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{float}
+\usepackage{natbib}
+\usepackage{rotating}
+\usepackage{array}
+\usepackage{siunitx}
+\usepackage{rotfloat}
+\usepackage{titling}
+\usepackage{booktabs}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+
+\title{Coercive Diplomacy and the Institutional Consequences of Economic Sanctions} 
+
+\author{Darin Self}
+
+\date{October 8, 2015}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\bibpunct{(}{)}{;}{a}{}{,} 
+\maketitle
+
+\begin{abstract}
+Previous scholarly work on the externalities of economic sanctions show an increase in human rights abuses when states are placed under sanctions. I build off of the intuition in these studies and analyze the institutional variance of regimes when a state is the target of coercive economic policy. Unlike previous analyses, I treat relationship between democracy and economic sanctions as non-linear and use vector quantization to identify clusters of regime types that are more or less susceptible to external pressure via economic sanctions. This hypothesis is tested using multivariate matching. I find that, on average, anocracies are more likely than consolidated democracies or autocracies to experience autocratic backsliding after economic sanctions have been imposed.  
+\end{abstract}
+
+\section*{\large{Why Investigate the Impact of Sanctions on Democracy?\footnote{I would like to thank James Morrow, Joel Selway, Daniel Maliniak, Pauline Jones Luong, Brian Min, and Ryan Powers for their valuable comments.}}}
+
+In the modern era, economic sanctions are frequently used as a tool to coerce concessions from opposing states. Recently, the United States and Europe imposed economic sanctions on Russia for its actions in Ukraine, and the United States has in place 26 programs of economic coercion against state and non-state actors (U.S. Department of the Treasury). Economic sanctions are a popular foreign policy instrument because they are less costly than military action and policy makers believe sanctions are an effective foreign policy tool. Those who write about sanctions and those who are in a position to implement them are most concerned with the effectiveness of this frequently used instrument of foreign policy. This is an important issue, but it is often narrowly interpreted to include only the intended immediate and intended consequences of economic sanctions. The current debate excludes the consideration of the unintended political consequences of economic sanctions, particularly their effects on the stability of political institutions. Moreover, political leaders often justify the imposition of economic sanctions by claiming they will bring about regime change or democratization in target countries. Previous analyses find, however, that political elites in non-democratic states tend to reduce civil liberties when sanctioned \citep{cingranelli2010cingranelli, wood2008hand, peksen2009better, peksen2009economic, pdeksen2010coercive, peksen2010coercive}. 
+\par
+A brief glance at the use of economic sanctions in the modern era illustrates an interesting and non-linear empirical pattern. From 1947 to 2004 the United States, a consolidated democracy, was sanctioned over 100 times, yet its level of democracy did not change. Similarly, the consolidated autocracy of Cuba has been under a trade embargo from the United States since the early 1960s with the explicit goal of coercing regime change. Like the United States, there has been relatively little change in Cuba; the level of autocracy remains constant. In contrast, Iran and Myanmar (Burma) experienced autocratic backslides after sanctions had been imposed on them, while some argue that South Africa increased in its level of democracy in response to multilateral sanctions \citep{klotz1995norms}. These examples suggest that what matters in determining variance in democracy is not necessarily the level of democracy but the level of consolidation of the regime.  
+\par
+I argue that economic sanctions may produce autocratic backsliding, conditioned on how consolidated a given regime is. For states with consolidated regimes, whether they be democratic or autocratic, economic sanctions will not produce any significant changes towards, or away from, democracy. Unlike states with consolidated regimes, the political institutions of anocracies are more unstable and thus, the level of democracy is likely to vary under the pressure of economic sanctions. Not only will the level of democracy vary after sanctions are imposed, the direction of the movement will be negative. This contradicts stated justifications for using economic sanctions as a foreign policy tool used to promote democratization.  
+\par
+In this paper, I review the current literature and then build a theoretical foundation as to the circumstances under which autocratic backsliding will occur after sanctions have been imposed. From this theory, I generate a number of hypothesis, discuss the data and variables that used to test these hypotheses and address the significance and implications of the findings. I find that, on average, economic sanctions correlate with autocratic backsliding across the entire regime spectrum as measured by Polity IV. 
+\par
+\section*{\large{Previous Studies on the Externalities of Sanctions}}
+
+The literature on economic sanctions is replete with analyses of the effectiveness of sanctions \citep{lindsay1986trade, tsebelis1990sanctions, elliott1993effectiveness, smith1995success, dashti1997determinants, morgan1997fools, pape1997economic, elliott1998sanctions, drezner2000bargaining, marinov2005economic}, why certain states choose to sanction others \citep{nossal1989international, smith1995success, hart2000democracy, baldwin2006sanctions}, and what influences the duration of sanctions \citep{bolks2000long, dorussen2001ending, mcgillivray2004political}. Each of these questions about sanctions is significant but I do not focus on why a certain state chooses to sanction another, why target states acquiesce to the demands of the sender, or why some sanctions are short-lived while others survive for decades. I instead focus on what happens once the die has been cast. In other words, I analyze the externalities that target states experience due to the imposition of sanctions. The immediate success, and the reasons for success or failure, of sanctions may be important to both the academy and policy community, but we also must understand the long-term unintended costs associated with sanctions.
+\par
+The literature on sanctions is dominated by questions about the effectiveness of this foreign policy tool, but the question of externalities generated by sanctions also has received significant attention. This literature on externalities is divided into two camps: literature that looks at the humanitarian impact, or human costs, of sanctions, and works that analyze the effect of sanctions on human rights and liberal democratic values.
+\par
+Scholarship on the human costs of economic sanctions is dominated by studies that analyze public health consequences. These studies generally show that economic sanctions have significant impact on the level of health within the receiving country. This may be due to the disruption of the heal care provision by the state or the significant deterioration of economic resources necessary to provide care \citep{gibbons1999impact, garfield1995health, peksen2011economic}. In addition to these more general studies, there are a number of studies use case studies to identify the health costs of sanctions. These include studies of Iraq prior to the Gulf War \citep{garfield1999morbidity, ascherio1992effect}, the complete trade embargo of Cuba \citep{garfield1997impact, barry2000effect, kuntz1994politics}, and the sanctions imposed on Haiti after the 1991 coup against popularly elected President Jean-Bertrand Aristide \citep{gibbons1999impact}.  Finally, Hufbauer et al. explore the human costs of sanctions by showing that the effects of sanctions actually spill over and affect the level of wages and employment in the sender state \citep{hufbauer1997us}.  
+\par
+Understanding the human costs associated with economic sanctions is pertinent to the present study, as these costs are likely to influence the political system of a given country. The works are not sufficient to provide a robust understanding of the general political costs of sanctions, however, since the studies don't directly address politics or approach the study of sanctions in a way that makes their findings more generalizable.  
+\par
+The other side of the literature concerning the externalities produced by economic sanctions focuses on their impact on liberal democracies, with respect to civil liberties. Two studies by Peksen and Drury illustrate how economic sanctions lead to significant decreases in civil liberties within the target state \citep{peksen2009economic, peksen2010coercive}. Both of these show that political elites respond to economic sanctions by reducing civil liberties at home. Other literature that doesn't look directly at changes in civil liberties instead analyzes the impact of sanctions on human rights as measured by the Physical Integrity Index \citep{cingranelli2010cingranelli, peksen2009better, wood2008hand} or media freedom \citep{pdeksen2010coercive}. Studies exploring the impact of sanctions on democracy include either of two assumptions: that political elites seek to repress citizens but are unfettered by the implementation of sanctions; or political elites respond to unrest caused by sanctions with repression.
+\par
+Another assumption implicit in these analyses is that democracy is a linear concept. In the two studies in which the change in change in civil liberties is measured, the authors imply that the effect of sanctions is constant across the entire scale of democracy \citep{peksen2009economic, peksen2010coercive}. Wood's study on the levels of repression experienced under sanctions is the only analysis that introduces a segmented look within the range of democratic-ness but only uses democracies between 2 to 7 on the Polity IV scale as controls \citep{wood2008hand}. A strength of Wood's approach is that it accounts for variation in different characteristics of the sender(s) that influence the effectiveness of sanctions. Do states act unilaterally or with other nations? Are U.S. sanctions more detrimental than those imposed by the United Nations? Previously, the effect of sanctions were treated as homogenous.  
+\par
+Absent from these works is analysis determining whether economic sanctions affect democratization. If sanctions are imposed upon fragile regimes or anocracies, do they experience autocratic backsliding or do they become more democratic? Some analyses suggests that economic sanctions help push South Africa to become more democratic \citep{klotz1995norms} but others directly counter these findings \citep{levy1999sanctions}. The literature has established civil liberties decline when states are sanctioned but this does not answer whether the institutions of democracy erode under the pressure of economic sanctions.  
+\par
+Another potential weakness in the literature is its failure to account for natural resource wealth. Each of the previously cited articles testing the effects of sanctions on democratic norms claim that elites use the state and other available resources available to maintain their hold on power. Only one study, however, attempts to operationalize the variable of natural resource wealth. Peksen and Drury \citet{peksen2010coercive} account for the resources available to elites to maintain the loyalty of the winning coalition\footnote{The other studies may seek to operationalize this part of their theory using GDP as a control. It is a fairly reasonable assumption that the larger the economy more resources will be available to elites.}. These authors attempt to introduce mineral resource wealth into their model but only use a binary indicator of whether a state is an "oil state". This approach fails to capture important variance in the relationship between elites and the use of resources available to those who control the state apparatus.  
+\par
+All the literature on the human rights or humanitarian externalities associated with economic sanctions fails to account for changes in regime type. If we can assume that elites will seek to use the state as a repressive apparatus in the face of external coercion, we also need to ask whether leaders circumvent structural constraints on executive authority or seek to change the political institutions that govern political competition and selection. I build on the work done in previous studies on sanctions by offering a more nuanced analysis of the impact of sanctions across the spectrum of authoritarian and democratic regimes. Specifically, I take off from the intuition that domestic political institutions are crucial to what happens within the state when sanctions are imposed \citep{allen2008domestic}. Studies of sanctions that assume that states are a "black box" fail to account for the political and economic complexity within states or the political and economic complexity of the international system. Sanctions may be able to destabilize targeted political elites \citep{marinov2005economic} but the domestic political ramifications must be considered.  
+\section*{\large{Causal Mechanisms}}
+The theoretical foundations of this study are simple. Indeed, the theory is based upon selectorate theory, which assumes that political elites have to buy the loyalty of a particular subset of the population in order to hold on to power.  I build on selectorate theory by analyzing how elites respond to changes in the availability of resources in order to maintain sufficient loyalty.  This allows me to explain non-linear relationship between regime type and economic sanctions, as well as the impact of mineral wealth on regime stability.
+\par
+I assume that political elites are rational actors who seek to maximize their political power. Elites have access to a finite amount of resources, however, and use these resources to secure power. Economic sanctions erode these resources, and the elites must seek to maximize political power with fewer resources. Just as elites seek to maximize their political power, they also must function within a political system. This system has a given set of political, social, and economic resources as well as a set of institutions that constrain behavior. These institutions, or constraints, are the focus of this analysis. Because elites operate under institutions that constrain them, the pressure of economic sanctions incentivizes elites to alter the rules of the game to increase their chances of survival.  
+\par
+According to selectorate theory, political elites are able to survive as long as they are able to maintain the support of a winning coalition. This coalition is drawn from the broader selectorate and is determined, in part, by political institutions or rules of the game \citep{smith2005logic}. When the winning coalition is small, or more autocratic, political elites will use private goods or access to black markets to maintain support \citet[pg. 208-209]{smith2005logic}. On the other end of the spectrum, the winning coalition is large (i.e. approaches half of the selectorate) with a selectorate that includes a large portion of the total population. This structure incentivizes political elites to use public goods in place of private goods to maintain support from the winning coalition \citet[pg. 209]{smith2005logic}.
+\par
+Under the pressure of economic sanctions, the goods available to elites shrinks, and this reduces elites' ability to buy the loyalty of the winning coalition, whether through private or public goods. At the same time, the goods available to members of the winning coalition also shrink. In the case of democracy, or a large winning coalition, political elites are unable to deliver the same level of public goods and do not have the capability to provide private goods sufficient to maintain loyalty. In these instances, the ratio of the benefits of remaining loyal to the benefits of defecting is very small, and thus it is not costly to defect. In addition to elite's inability to provide sufficient goods, the rules that create such a large winning coalition would need to be drastically altered to adjust the size of the winning coalition to a point sufficient for elites to use private goods to maintain political support. Not only may this be difficult to change due to political norms, but elites would also need to alter the size of the winning coalition while avoiding coordinated defection by members of the winning coalition to a challenger. Defection is not costly and thus, coordination is unnecessary as marginal members of the winning coalition defect with ease to the challenger without losing the benefits of being member of the winning coalition.
+\par
+As is the case with elites in large winning coalitions, elites that maintain support with a small winning coalition, along with members of the winning coalition, lose the total amount of resources available to them when economic sanctions are imposed. Unlike their democratic counterparts, however, these elites can provide private goods or access to black markets to an identified smaller number of supporters. Members of the winning coalition will continue to support the elites as long as the benefits of being a member of the winning coalition are greater than, and known to be greater than, the benefits of defecting. The ratio of benefits received by being part of the winning coalition to the benefits of defecting is very large and incentivizes members to stay. In the circumstances that private wealth diminishes to the point that the benefits of being a member of the winning coalition are close to equal to the benefits of defecting, elites are able to use the state apparatus to draw wealth to pay for the loyalty of the marginal member of the winning coalition.  
+\par
+For members of the winning coalition defecting is extremely costly. Not only do they face the loss of economic wealth, but also the loss of their own life or the life of those with whom they have close personal relationships as this is a possible punishment for defection within autocratic or totalitarian regimes. In addition to these potential costs, defection can only lead to a new set of ruling elites if it is coordinated with a sufficient number of those within the winning coalition. As each member faces extreme costs without any formal guarantee that others will defect with them, members of the winning coalition will remain loyal. Thus, economic sanctions are unlikely to change the institutions when the winning coalition is very small. 
+\par
+By building on selectorate theory, I am able to generate the following hypotheses on how economic sanctions will effect regimes for consolidated democracies and autocracies. \\*
+\\
+\textbf{Hypothesis 1}: An increase in the strength of economic sanctions will not lead to a significant change in regime type, when the regime is a consolidated democracy. \\*
+\\
+\textbf{Hypothesis 2}: An increase in the strength of economic sanctions will not lead to a significant change in regime type, when the regime is a consolidated autocracy.\\ 
+\\
+Economic sanctions are unlikely to have any significant impact on the regime type for consolidated democracies and autocracies, but they are likely to have a negative influence on the stability of non-consolidated regimes. Because the ratio of the benefits of remaining loyal to the benefits of defecting in these cases is neither large nor small, economic sanctions are likely to have a significant impact. When economic sanctions are imposed, resource availability shrinks and reduces the ability of elites to maintain loyalty with public goods. This leads political elites to choose the course of action that tips the balance towards making defection more costly. In this case, elites must consider delivering goods, whether private or public, to those within the winning coalition and/or adjusting political institutions to restructure the winning coalition and minimize the costs of maintaining loyalty. In order to maintain power, elites need to know the payoff each member requires to stay loyal. The cost to the elites to know this payoff increases with each additional member of the winning coalition and thus, under the pressure of economic sanctions, elites will reduce the number in the winning coalition to a new equilibrium in which they are able to know the payoff for the loyalty of the marginal member of the winning coalition.  \\
+
+\textbf{Hypothesis 3}: Regimes that are not consolidated autocracies or democracies (e.g. anocracies) will experience autocratic backsliding, all else being equal, when there is an increase in economic sanctions. \\
+
+Because elites require resources in order to maintain the loyalty of those within the winning coalition, access to mineral wealth can alter the strategy of elites. One of the mechanisms in my theory is that political elites will use the state apparatus to secure or maintain loyalty (whether by extracting resources or using repression). In a state where natural resources are not the dominant sources of wealth, elites should be less able to extract wealth using the state. In states where natural resources are abundant, elites who control the state will be able to use the state apparatus to extract wealth from the natural resources as a more direct source of revenue. This can be done by creating a rentier state to reduce demand for democracy, or by setting up a repressive state where natural resource wealth is used to directly repress popular pressure for institutional adjustments towards democracy \citep{ross2001does}. In effect, the availability of natural resources reduces the costs of moving away from democracy when anocracies face economic sanctions.  \\
+\\
+\textbf{Hypothesis 4}: Natural resources will have a positive marginal effect on the correlation between economic sanctions and autocratic backsliding in anocracies. 
+
+
+\section*{\large{Datasets and Variables}}
+
+The data used to measure the impact economic sanctions have on target countries is limited, because economic costs are estimated rather than measured directly. For this study, I employ two different datasets used in previous studies to measure costs of economic sanctions. Both datasets build on an original dataset created by \citet[Henceforth \textbf{HSE}]{hufbauer1990economic}. The first is an updated version of HSE that transforms the data into a country-year format (Marinov 2005). The data represent 1,181 cases of economic sanctions from the time-period 1947--1999. Marinov's \citet{marinov2005economic} dataset measures sanctions as a dichotomous variable. Second, Wood \citet{wood2008hand} builds on HSE by applying a categorical scale for the level of severity of sanctions, which will be discussed in detail below.  
+
+\centerline{\textit{Response Variables}}
+
+\par
+The purpose of this study is to shed greater light on the effect that economic sanctions have on democracy. As this is the design of the study, three widely used measures of democracy can be considered; Freedom House, Polity IV, and ACLP.  Previous studies seeking to understand the externalities experienced as a result of economic sanctions focused on the liberal definition of democracy and used the Freedom House measure \cite{lopez1997economic, peksen2009better, peksen2009economic, peksen2010coercive, pdeksen2010coercive, wood2008hand}. I am more concerned with the institutional stability of democracy than measuring liberal democracy, so Freedom House is not an appropriate measure for democracy in this case. This may lead to different findings than studies that employed Freedom House, but I expect Freedom House and other measures to be correlates. As can be seen in the figure below, the average measure of democracy actually moves in the same direction after the mid-1980s when Freedom House and Polity IV are compared\footnote{Because Polity IV and Freedom House use different scales I inverted the average Freedom House score by year and multiplied it by 50. $[1/Avg(FH)]*50$ The Polity measure uses polity2 from the Polity IV dataset and is scaled by adding 20 $Avg(polity2 +20)$}.   
+\par
+ENTER GRAPH HERE
+\par
+Freedom House and Polity IV are correlated, but they capture different concepts of democracy with Polity IV favoring institutional factors. 
+\par
+The other major dataset used to measure democracy is the dataset created by Pzeworski, Alvarez, Cheibub, and Limongi \citet[Henceforth \textbf{ACLP}]{przeworski2000democracy}. ACLP seeks to measure democracy in an institutional sense but does so crudely with a dichotomous measurement. Within their dataset, Przeworksi et al categorize a regime as either a democracy or a dictatorship. This conceptualization is simplified because of the complexity in operationalizing and measuring democracy and thus, limits the ability to measure more nuanced aspects of democratic institutions \citep{bogaards2012draw}. Indeed, within ACLP certain regimes are coded as being non-democratic primarily for a lack of transitions of ruling parties, even though elections were mostly free and fair and the executive was institutionally restrained (e.g. Botswana independence to current). The characteristics of the ACLP operationalization of democracy and the use of a dichotomous measure do not identify what I intend to test.  
+\par
+The other widely used data to measure democracy is Polity IV. Unlike Freedom House, Polity codes the level of democracy based on institutional characteristics instead of a normative conception of democracy. In addition, Polity is more nuanced in measuring these characteristics than ACLP. Polity IV is measured on a scale of -10 (hereditary monarchy) to + 10 (consolidated democracy). By using a 21-point scale, Polity IV allows me to measure how democratic institutions co-vary with the implementation and severity of sanctions.  
+\par
+Polity IV is a better measurement of democracy for the purposes of this analysis, but it is by no means perfect. Indeed, previous work has shown that the coding of democracy under the Polity IV scheme leads to measurement error. Certain analysis of measures of democracy have found that the measurement error is heteroskedastic for regimes coded on the poles of the Polity scale \citep{treier2008democracy, pemstein2010democratic}. These problems reduce the power of inference when using Polity, however it is still deemed to be a superior measure relative to other existing measures of democracy \citep{munck2002conceptualizing} while other measures, such as Unified Democracy Scores, are a synthesis of democracy scores citep{pemstein2010democratic}.
+\par
+Despite the cited critiques of the Polity coding scheme it is one of the most, if not the most, reliable measure of democracy available today. Because of the theory developed in the previous section and critiques recently mentioned, I will use the lagged difference of \textit{polity2} $Y_{t-1}$ which codes competiveness and openness of executive recruitment, constraints on the executive, regulation and competiveness of participation \citep{marshall2002polity}. In addition to the lagged difference of \textit{polity2}, I use a binary indicator that is registered as one if the lagged difference of  \textit{polity2} is negative. Lastly, as another response variable, I use selectorate data to test the hypotheses that there will be a change in the winning coalition \citep{smith2005logic}. 
+\par
+As previously discussed, I do not expect the covariance of economic sanctions and democracy to be linear. Previous studies that assume a non-linear relationship between Polity IV and another variable have sought to address this problem by segmenting Polity IV based on theory. I will seek to do the same in the analysis portion. As discussed in the theory section, I expect the average effect of economic sanctions on democracy to differ between authoritarian regimes (Polity score -10 to -7), competitive authoritarian regimes (Polity score -7 to -4), anocracies (-3 to 3), semi-democracies (4 to 7) and consolidated democracies (7 to 10). The focus will be on regimes that are anocratic \citep{vreeland2008effect, hegre2001toward, fearon2003ethnicity} with the expectation that consolidated regimes do not co-vary with sanctions. However, the use of this demarcation of democracy is unsatisfying.  
+\par
+A significant critique of the use of Polity IV is that there is no statistical difference between regimes that are coded toward the negative or positive (-10 to -8 and 8 to 10)\citep{treier2008democracy}. Because of this finding, I do not believe it is sufficient to demarcate democracy theoretically.  Indeed, I believe because of the error introduced by the human conception of and the latency of democracy, there is a need to identify natural clusters of democracy. In addition to the theoretically derived segments of democracy identified previously, I will use partitioning, specifically k-means, to identify clusters of democracy and reduce within group variance.
+\par
+\centerline{\textit{Treatment Variables}}
+\par
+The main explanatory that I use to test my hypotheses is \textit{Sanctions}. \textit{Sanctions} is binary measure of sanctions episodes coded by Hufbauer et al. (1990) and later updated by \citet{marinov2005economic}. \textit{Sanctions} is coded as one in the year that sanctions are actually initiated. Because the impact of sanctions may be delayed, I test the treatment effect of lagged \textit{Sanctions} on \textit{Regime}. While the dataset of sanctions is logitudinal, each yearly episode of \textit{Sanctions} are treated as cross-sections with their associated receiver state. \\
+\\
+\centerline{\textit{Control Variables}}
+\\
+\\
+I include a number of control variables that are the norm to include when democracy is the response variable. Namely, I control for economic development and population size. In addition, I include a control for the rentier effect that may allow elites to use resource wealth to avoid the constraints of sanctions. To control for the rentier-ness of the state I use a measure of the logged energy production in metric tons of oil \citep{norris2008driving}. Because of a lack of data availability for energy production I use the \textbf{Amelia} package in R to estimate these values when missing\citep{honaker2011amelia}. I then estimate the treatment effect of sanctions on changes in democracy using the mean and the mean plus and minus the standard deviation of the estimated and measured energy production in a covariate matrix to account for the possible distribution of energy production. I then interact the measure of energy output with the binary measure of sanctions to test whether resources wealth modifies the effect of sanctions on democracy. 
+
+\section*{\large{Methodology}}
+In order to test the hypotheses derived in the theoretical section I employ multivariate matching to measure the treatment effect of economic sanctions on regime change. I choose this method in order to account for selection bias as sanctions may be imposed due to the regime type of the receiver state. The panel of data was constructed by merging two datasets measuring the impact of sanctions on political instability \citep{marinov2005economic} and state repression \citep{wood2008hand} with the Democracy Timerseries Data 3.0 dataset \citep{norris2008driving} and The Logic of Political Survival Data Source \citep{smith2005logic}. 
+\par
+The data was imported into, and the analysis performed using the statistical software R. Because the panel data is unbalanced, I used the \textbf{GenMatch} package which uses genetic matching, a method that uses an evolutionary search algorithm that computationally balances the data to allow multivariate matching\citep{diamond2013genetic}. 
+\par
+As previously discussed in the data section, I used k-means to determine clusters of democracy. This was also performed in R using the \textbf{kmeans} command as a method to partition democracy. In order to discover the clusters, I used the algorithm on the variables \textit{polity2} and \textit{dpolity} for all observations. I used the command testing a number of different possible numbers of clusters under ten and determined that the best number is five with the clusters shown in the table below. 
+\par
+
+TABLE ON THEORITICAL DELINIATION VS KMEANS
+
+
+\section*{\large{Results and Discussion}}
+
+Having determined the number of clusters, I match \textit{Sanctions} and \textit{Regime} including the full sample of cross-sectional observations on the differenced variable \textit{polity2} as well as the lag of the winning coalition (\textit{w}) to find the average effects of \textit{Sanctions} on \textit{Democracy}. Surprisingly, \textit{Sanctions} is found to have a strong negative effect on \textit{Regime} across the entire spectrum of Polity IV. As presented in the table below, the expected change in \textit{Regime} when sanctions are imposed is -1.32. This estimate is both statistically significant at the 99\% confidence level and substantively significant in that we expect the level of democracy to decrease by 1.32 each sanctions episode. The estimate is substantively significant because when \textit{Regime} does change, the median value is a positive 2 on the \textit{polity2} scale demonstrating that the average change of \textit{Regime} under pressure of \textit{Sanctions} is a difference of 3.32 from the average change of \textit{Regime} when a given country is not under pressure of \textit{Sanctions}. In context of real world examples, this would be equivalent to Malawi in 2001 shifting to the likes of Burkina Faso or Liberia in that same year. 
+\par
+
+FIRST RESULTS 
+\par
+In addition to the expected change in \textit{Regime} I also measured the treatment effect of sanctions on whether there would be any negative change in \textit{Regime} or the winning coalition. As shown in the table above, the probability of a negative change in \textit{Regime} is 0.06 and 0.035 when treated by \textit{Sanctions} and the lag of \textit{Sanctions} respectively. Lastly, under the pressure of \textit{Sanctions} the expected change in the winning coalition which ranges from 0 to 1 in increments of 0.25, is -0.06. 
+\par
+The primary purpose of this analysis was not measure the treatment effects of \textit{Sanctions} on changes in \textit{Regime} writ large but to parse out the effects of \textit{Sanctions} on different common demarcations of regime types along the \textit{Regime} spectrum. In order to test \textbf{Hypothesis 1}, \textbf{Hypothesis 2}, and \textbf{Hypothesis 3} I demarcated regime types as outlined in \textbf{Table 1}\footnote{Regime is deliniated by \textit{polity2} as \textit{Autocracy} -8 to -10, \textit{Competitive Autocracy} -7 to -4, \textit{Anocracy} -3 to 3, \textit{Semi-Democracy} 4 to 7, \textit{Democracy} 8 to 10} and tested the treatment effects of \textit{Sanctions} on changes in \textit{Regime} with the data subsetted on cases within the respective ranges. The results of these results are presented in the table below and are somewhat surprising. Because tests on the entire sample had found a negative treatment effect of \textit{Sanctions} on changes in \textit{Regime}, I expected to find similar, if not greater results in magnitude, within these segments of regime type. The tests presented a plethora of non-significant results with only one result of note. For anocratic regimes, the probability of a negative change in \textit{Regime} is 0.093 and is only found when treated by the lag of \textit{Sanctions}.
+\par
+As previously discussed in the \textbf{Datasets and Variables} section, I hesitate to solely rely on regime type that I derived theoritically. Because of this hesitation, to demarcate regime type I used the \textbf{kmeans} command in R which is a partitioning method that uses clustering to identify natural groups within the data. Having done this, I subsetted the data according to the partitioning\footnote{Regime is deliniated by \textit{polity2} as \textit{Autocracy} -7 to -10, \textit{Competitive Autocracy} -8 to -5, \textit{Anocracy} -4 to 2, \textit{Semi-Democracy} 1 to 9, \textit{Democracy} 5 to 10} and matched accordingly. Using this method, I find that \textit{Sanctions} have an expected negative treatment on \textit{Democracy} with an expected decrease in textit{Regime} of 0.404 \footnote{\textit{Democracy} includes all cases within the range of 5 to 10 of Polity IV scale in this test}. While I found no significant results for the lag of textit{Sanctions} on \textit{Regime}, I found multiple significant treatment effects for the lag of \textit{Sanctions} on the binary value for a negative change in \textit{Regime}. For \textit{Semi-Democracy}, \textit{Anocracy}, and \textit{Competitive Autocracy} I find an expected positive probability that imposing sanctions will lead to a negative change in \textit{Regime} two years after the sanctions are imposed. For this lag measurement, no significant results were found for fully democratic or autocratic regime types. This is to be expected and supports \textbf{Hypothesis 1} and \textbf{Hypothesis 2} that \textit{Sanctions} will not affect consolidated regimes. However, I did find a weak treatment effect between a negative change in \textit{Democracy} and the non-lagged \textit{Sanctions}.
+\par
+NEXT TABLE
+\par
+Having using \textit{polity2} as an indicator to measure institutional regime change, I turn my attention to measuring changes in the winning coalition. Previously, I hypothesized that \textit{Sanctions} would give political elites incentives to reduce the size of the winning coalition. I tested this hypothesis using selectorate data \citep{smith2005logic} and found that sanctions only have a treatment effect in semi-democracies, or non-consolidated democracies \footnote{the winning coalition is measured on a scale of 0-1 and is divided into quartiles. In this case, semi-democracies is coded as 0.75 out of 1}. The results for the effect of \textit{Sanctions} on the winning coalition is contradictory however, as the estimated effect on the size of the winning coalition is negative when \textit{Sanctions} are not lagged but positive when \textit{Sanctions} are lagged. Currently, I cannot explain why the sign flips when \textit{Sanctions} are lagged. This may be an artifact of the methodology employed or there may be a theoretical explanation. In previous tests when \textit{polity2} was used as an explanatory variable, the signs are consistent when the relationship is statistically significant. More work remains in order to evaluate this finding. 
+\par
+NEXT TABLE
+\par
+
+\section*{\large{Moving Forward}}
+
+The next steps in this analysis are threefold: first, I must perform robustness checks; second, I must address sanctions as being non-binary; lastly, I need to test the interactive effect of energy production and sanctions. While matching is useful to estimate treatment effects in observational data, the results are only valid if there are no unobserved confounders \citep{ keele2010overview}. As a robustness check, I will use a Rosenbaum sensitivity analysis to estimate if there is sufficient hidden bias to suggest the presences of unobserved confounders \citep{rosenbaum2002observational}. Another robustness check concerns the use of multiple imputations. In order to account for missing data in energy and industrial production, I used multiple imputations to estimate the yearly value of these missing observations. For the analysis I used 15 iterations, from which, I drew the mean value across all iterations and used this value as the estimate for the missing value.  To test the robustness of these covariates, I will substitute the mean value for the value one standard deviation below and above the mean and check to see if the significance of the models holds.  
+\par
+Another critical step forward in this analysis is address the non-binary nature of sanctions. The vast majority of sanctions have a minimal economic impact on the receiver state \citep{wood2008hand}. The data used in this analysis then, is diluted with a large selection of sanction episodes that are not expected to have a significant impact on elite behavior. Using data from citep{wood2008hand} I can better address this as he categorizes sanctions on a four point scale in severity. This will allow me to sub-set the sample by severity and reestimate the effect of sanctions on regime type. This will be problematic however, as many of the regime subsets already have a low number of observations. 
+\par
+The last issue to address is the lack of test on \textbf{Hypothesis 4}.I theorized that access to resources, such as oil, will allow elites to diminish the effect of sanctions on their ability to maintain the loyalty of the winning coalition. Because matching was used to address selection bias, I am unaware how to measure the marginal effect of energy production on \textit{Sanctions} influence on regime type. I will need to do more research on matching in order to find if this is possible. 
+
+\section*{\large{Conclusion}}
+
+The purposes of this analysis was to test if economic sanctions negatively affect the regime type of receiver states. In order to test this hypothesis, I employed multivariate matching on data that measured the treatment effect of sanctions episodes on changes in regime type, as measured by Polity IV and Selectorate data. I find that on average, sanctions do indeed lead to autocratic backsliding. The implications of these findings should be critical to policy makers. Political elites in the West have repeatedly justified the use of sanctions as punishment for non-democratic behavior and economic sanctions are a popular foreign policy tool used to coerce the behavior of other states with little direct costs to the sender state.  While this may be the case, the outcomes stand in direct opposition to stated foreign policy goals. Foreign policy elites need to understand that imposing economic sanctions, independent of their severity, will lead to autocratic backsliding of a significant magnitude across the \textit{entire} regime spectrum. Furthermore, elites must account for the finding that a negative shift in regime type is more probable in non-consolidated regimes. If foreign policy elites still decide to impose sanctions, they must do so understanding the elites in the receiver state will seek to alter institutions that constrain their actions and that concessions in the behavior by the receiver state should outweigh the costs of autocratic backsliding. 
+\par
+To conclude, the theory I posited suggests that political elites culling the winning coalition as a response to economic pressure in response to sanctions. An alternative explanation, however, would suggest that autocratic backsliding occurs due to public instability caused by economic pressure. While I believe this explanation has merit, I believe that my analysis identifies elite behavior. I believe this is the case because I used both Polity IV data and Selectorate data. Specifically, the Polity IV data I used measures institutional constraints on executive behavior, which is an institutional measure as opposed to a conceptualization of democracy that measures the elite-public spectrum. While I believe this analysis measures changes in political institutions, there is still much to do in terms of checking the robustness of the results, addressing the potential modifying effect of resource wealth, and expanding the operationalization of sanctions. 
+
+\bibliographystyle{chicago}
+\bibliography{bib}
+
+
+
+
+
+
+\end{document}
