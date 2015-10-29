@@ -1,0 +1,14 @@
+\documentclass{article}
+
+\begin{document}
+
+<<>>=
+#install.packages("Matching", dependencies=TRUE)
+#install.packages("rgenoud")
+
+library(Matching)
+library(regenoud)
+@
+
+
+\end{document}
