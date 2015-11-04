@@ -20,7 +20,7 @@ df <- read_csv("SanctionsFinal.csv") %>%
 #dpolity - difference of polity2
 #S - measure of selectorate (Logic of Political Survival)
 #W - measure of winning coalition with S
-#ndpolity - the magnitude of change in polity2
+#ndpolity - binary if dpolity is negative
 #ds - difference of S
 #dw - difference of W
 #lagus - lagged measure of sanction if sanctions were imposed by the U.S. Quasi continuous with 0 being no sanctions up to 3 being severe sanctions
@@ -33,7 +33,7 @@ df <- read_csv("SanctionsFinal.csv") %>%
 #MEast - dummy for if in the Middle East
 #demaut - unsure - need to track down which dataset this came from
 #lGDP_UN ln GDP_UN
-#dpolityb - binary for if there was a change in polity2
+#dpolityb - binary for if there was any change in polity2
 #Pdpolity - probability of change in polity2 given the polity score
 #menergy - mean of imputed energy output
 #senergy - std dev of imputed energy output
@@ -172,7 +172,7 @@ print(summary(mgen1))
 
   
   #Lowest Levels (cluster == 5) level 
-  d1 <- filter(df, cluster == 5)
+d1 <- filter(df, cluster == 5)
 
 X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
 
@@ -184,4 +184,30 @@ gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.si
 mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
 print(summary(mgen1))
 
-  \end{document}
+####Split on polity = 0####
+#Above 0
+d1 <- filter(df, polity2 > 0)
+
+X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
+
+BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
+                       I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
+
+gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
+
+mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
+summary(mgen1)
+
+#at or below 0
+d1 <- filter(df, polity2 <= 0, polity2 > -6)
+
+X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
+
+BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
+                       I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
+
+gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 100, print.level = 0, unif.seed=3392, int.seed=8282)
+
+mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
+summary(mgen1)
+
