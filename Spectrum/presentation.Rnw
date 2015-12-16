@@ -1,7 +1,13 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{fullpage}
+\usepackage{pdflscape}
+\usepackage{nopageno}
 
 \begin{document}
-
+\begin{landscape}
+\section{Getting Started}
 <<eval=TRUE, message=F, warning=F, echo=T>>=
 #install.packages("Matching", dependencies=TRUE)
 #install.packages("rgenoud")
@@ -15,11 +21,17 @@ library(readr)
 df <- read_csv("SanctionsFinal.csv") %>% 
   mutate(pop1 = log(pop1)) %>% 
   filter(!is.na(GDP_UN)) %>% 
-  mutate(deliniation = ifelse(polity2 >= 6, 1, ifelse(polity2 >= 2 & polity2 < 6, 2, ifelse(polity2 < 2 & polity2 > -2, 3, ifelse(polity2 <= -2 & polity2 >= -5, 4, ifelse(polity2 <= -6, 5, NA)))))) 
+
+  mutate(deliniation = ifelse(polity2 >= 6, 1, 
+                              ifelse(polity2 >= 2 & polity2 < 6, 2,
+                              ifelse(polity2 < 2 & polity2 > -2, 3, 
+                              ifelse(polity2 <= -2 & polity2 >= -5, 4, 
+                              ifelse(polity2 <= -6, 5, NA)))))) 
 
 df$murban[df$murban < 0] <- 0
 
-dsum <- as.data.frame(select(df, polity2, sanctions, GDP_UN, pop1, menergy, mindustry, murban, dpolityb)) 
+dsum <- as.data.frame(select(df, polity2, sanctions, GDP_UN, 
+                             pop1, menergy, mindustry, murban, dpolityb)) 
 
 dt <-  df %>%
   group_by(sanctions) %>% 
@@ -27,151 +39,107 @@ dt <-  df %>%
 dt <- as.data.frame(dt)
 @
 
+\section{Sources of data}
+Polity IV project which measures levels of political contestation \href{http://www.systemicpeace.org/polity/polity4.htm}{Polity IV} \\
+
+Project by Reed Wood at ASU titled \href{https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/12261}{``A Hand Upon the Throat of a Nation: Economic Sanctions and State Repression, 1976-2001''} \\
+
+Project by Nikoly Marinov at University of Mannheim titled \href{https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/19774}{``Do Economic Sanctions Destabilize Country Leaders?''} \\
+
+Data collected by Pippa Norris used in her 1999 book \href{https://sites.google.com/site/pippanorris3/research/data}{Website}
+\clearpage
 <<summary, results='asis'>>=
 stargazer(dsum, title = "Summary Statistics")
-stargazer(dt, summary = F, title = "Average Score of Democracy: Sanctioned vs Non-Sanctioned", rownames = F)
+stargazer(dt, summary = F, title = "Average Score of Democracy: 
+          Sanctioned vs Non-Sanctioned", rownames = F)
 @
-
+\clearpage
 <<>>=
 X <- select(df, GDP_UN, pop1, menergy, mindustry, murban)
 
-BalanceMatrix <- cbind(df$GDP_UN, df$pop1, df$menergy, df$mindustry, df$murban, I(df$GDP_UN*df$pop1), I(df$GDP_UN*df$menergy),
-                        I(df$GDP_UN*df$mindustry), I(df$GDP_UN*df$murban), I(df$pop1*df$murban), I(df$murban*df$mindustry),I(df$pop1*df$mindustry))
+BalanceMatrix <- cbind(df$GDP_UN, df$pop1, df$menergy, 
+                       df$mindustry, df$murban, I(df$GDP_UN*df$pop1),
+                       I(df$GDP_UN*df$menergy), I(df$GDP_UN*df$mindustry), 
+                       I(df$GDP_UN*df$murban), I(df$pop1*df$murban), 
+                       I(df$murban*df$mindustry),I(df$pop1*df$mindustry))
 
-gen1 <- GenMatch(Tr = df$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
+#gen1 <- GenMatch(Tr = df$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 1000, 
+                    #print.level = 0, unif.seed=3392, int.seed=8282)
+load("gen1.Rdata")
 
 mgen1 <- Match(Y = df$polity2, Tr = df$sanctions, X = X, Weight.matrix = gen1)
 print(summary(mgen1))
-@
 
-<<>>=
-qqplot(df$GDP_UN[mgen1$index.treated], df$GDP_UN[mgen1$index.control],
-                 xlab = "Treated", ylab = "Control", main = "QQ Plot of Distribution of GDP")
 
-qqplot(df$pop1[mgen1$index.treated], df$pop1[mgen1$index.control],
-                 xlab = "Treated", ylab = "Control", main = "QQ Plot of Distribution of GDP")
-
-qqplot(df$menergy[mgen1$index.treated], df$menergy[mgen1$index.control],
-                 xlab = "Treated", ylab = "Control", main = "QQ Plot of Distribution of GDP")
-
-qqplot(df$mindustry[mgen1$index.treated], df$mindustry[mgen1$index.control],
-                 xlab = "Treated", ylab = "Control", main = "QQ Plot of Distribution of GDP")
-
-qqplot(df$murban[mgen1$index.treated], df$murban[mgen1$index.control],
-                 xlab = "Treated", ylab = "Control", main = "QQ Plot of Distribution of GDP")
-@
-
-<<overall, results='asis'>>=
-stargazer(mgen1, title = "Summary Statistics")
+r1 <- with(mgen1,
+ as.data.table(data.frame(Estimate = est, `AI SE` = se, `T-statistic` = est/se, p.val = (1 - pnorm(abs(est/se))) *
+             2, Original.n = orig.nobs, Matched.n = wnobs))) %>% 
+  mutate(Model = "Sanctions", Sample = "Full") %>% 
+  select(Model, Sample, Estimate, Original.n, Matched.n, AI.SE, T.statistic, p.val)
 
 @
 
 <<>>=
-library(ggplot2)
-library(scales)
+dfl <- df %>%
+  filter(!is.na(sanctionsl1))
 
-dp <- df %>% 
-  group_by(Year, polity2) %>% 
-  filter(!is.na(dpolityb)) %>% 
-  count(dpolityb, polity2) %>% 
-  group_by(polity2) %>% 
-  mutate(Pdpolity = n/sum(n)) %>% 
-  filter(dpolityb == 1) %>% 
-  select(polity2, Pdpolity)
+X <- select(dfl, GDP_UN, pop1, menergy, mindustry, murban)
 
-ggplot(dp, aes(x = polity2, y = Pdpolity)) +
-  geom_bar(stat="identity") +
-  xlab("Polity Score") +
-  ylab("Probability of Change in Polity Score") +
-  ggtitle("Distribution of Probability of Change in Polity Score") +
-  scale_y_continuous(labels=percent)
+BalanceMatrix <- cbind(dfl$GDP_UN, dfl$pop1, dfl$menergy, dfl$mindustry, dfl$murban, 
+                       I(dfl$GDP_UN*dfl$pop1), I(dfl$GDP_UN*dfl$menergy),
+                       I(dfl$GDP_UN*dfl$mindustry), I(dfl$GDP_UN*dfl$murban), 
+                       I(dfl$pop1*dfl$murban), I(dfl$murban*dfl$mindustry),I(dfl$pop1*dfl$mindustry))
 
+#gen1l <- GenMatch(Tr = dfl$sanctionsl1, X = X, BalanceMatrix = BalanceMatrix, 
+                #pop.size = 1000, print.level = 0, unif.seed=3392, int.seed=8282)
+load("gen1l.Rdata")
+mgen1 <- Match(Y = dfl$polity2, Tr = dfl$sanctionsl1, X = X, Weight.matrix = gen1l)
+print(summary(mgen1))
+
+
+
+r2 <- with(mgen1,
+ as.data.table(data.frame(Estimate = est, `AI SE` = se, `T-statistic` = est/se, p.val = (1 - pnorm(abs(est/se))) *
+             2, Original.n = orig.nobs, Matched.n = wnobs))) %>% 
+  mutate(Model = "Lagged Sanctions", Sample = "Full") %>% 
+  select(Model, Sample, Estimate, Original.n, Matched.n, AI.SE, T.statistic, p.val)
+
+results <- rbind(r1, r2)
+stargazer(results, summary = F, rownames = FALSE)
+@
+
+\clearpage
+<<>>=
 k1 <- select(df, polity2, Pdpolity)
 set.seed(2)
 fit1 <- kmeans(k1, 5)
 aggregate(k1,by=list(fit1$cluster),FUN=mean) %>% 
   arrange(-polity2) 
-  
 
 k1 <- data.frame(k1, fit1$cluster) %>% 
   mutate(fit1.cluster = plyr::mapvalues(fit1.cluster, from = c(3, 1, 4, 5, 2), to = c(1, 2, 3, 4, 5))) %>% 
-    select(cluster = fit1.cluster) 
+  select(cluster = fit1.cluster) 
 
 df <- cbind(df, k1) 
 @
 
 <<>>=
-#Highest (cluster == 1) level 
+#Select on highest (cluster == 1) level in k-means
 d1 <- filter(df, cluster == 1)
 
 X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
 
-BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
-                        I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
+BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, 
+                       I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
+                       I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), 
+                       I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
 
-gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
+#genk1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, 
+                #pop.size = 10000, print.level = 0, unif.seed=3392, int.seed=8282)
+load("genk1.Rdata")
 
-mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
+mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = genk1)
 print(summary(mgen1))
 @
-
-<<>>=
-#Second Highest (cluster == 2) level 
-d1 <- filter(df, cluster == 2)
-
-X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
-
-BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
-                        I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
-
-gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
-
-mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
-print(summary(mgen1))
-@
-
-<<>>=
-#Mid Levels (cluster == 3) level 
-d1 <- filter(df, cluster == 3)
-
-X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
-
-BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
-                        I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
-
-gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
-
-mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
-print(summary(mgen1))
-@
-
-<<>>=
-#Second Lowest Levels (cluster == 4) level 
-d1 <- filter(df, cluster == 4)
-
-X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
-
-BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
-                        I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
-
-gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
-
-mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
-print(summary(mgen1))
-@
-
-<<>>=
-#Lowest Levels (cluster == 5) level 
-d1 <- filter(df, cluster == 5)
-
-X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
-
-BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
-                        I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
-
-gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
-
-mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
-print(summary(mgen1))
-@
+\end{landscape}
 \end{document}

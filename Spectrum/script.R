@@ -50,6 +50,8 @@ df$murban[df$murban < 0] <- 0
 X <- select(df, GDP_UN, pop1, menergy, mindustry, murban)
 
 #create matrix of what the algorithm will use to balance
+#remove interactions if I don't believe they're related to the response
+  #everything needs to point to the response in order to block backdoor paths
 BalanceMatrix <- cbind(df$GDP_UN, df$pop1, df$menergy, df$mindustry, df$murban, I(df$GDP_UN*df$pop1), I(df$GDP_UN*df$menergy),
                        I(df$GDP_UN*df$mindustry), I(df$GDP_UN*df$murban), I(df$pop1*df$murban), I(df$murban*df$mindustry),I(df$pop1*df$mindustry))
 
@@ -58,10 +60,10 @@ BalanceMatrix <- cbind(df$GDP_UN, df$pop1, df$menergy, df$mindustry, df$murban, 
 #I found that the ATT doesn't really change much as we alter this but the p-value is reduced as it increases
 #print.level just prevents it from printing the output of balancing
 #unif.seed and int.seed sets the seed
-gen1 <- GenMatch(Tr = df$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
+gen1 <- GenMatch(Tr = df$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 1000, print.level = 0, unif.seed=3392, int.seed=8282)
 
 #perform the estimation using the matched sample
-mgen1 <- Match(Y = df$polity2, Tr = df$sanctions, X = X, Weight.matrix = gen1)
+mgen1 <- Match(Y = df$polity2, Tr = df$sanctionsl1, X = X, Weight.matrix = gen1)
 
 summary(mgen1)
 
@@ -186,28 +188,47 @@ print(summary(mgen1))
 
 ####Split on polity = 0####
 #Above 0
+setwd("C:/Users/Darin/Documents/sanctionsbackslide/Spectrum")
+
+df <- read_csv("SanctionsFinal.csv") %>% 
+  mutate(pop1 = log(pop1)) %>% 
+  filter(!is.na(GDP_UN)) %>% 
+  
+  mutate(deliniation = ifelse(polity2 >= 6, 1, 
+                              ifelse(polity2 >= 2 & polity2 < 6, 2,
+                                     ifelse(polity2 < 2 & polity2 > -2, 3, 
+                                            ifelse(polity2 <= -2 & polity2 >= -5, 4, 
+                                                   ifelse(polity2 <= -6, 5, NA)))))) 
+
+df$murban[df$murban < 0] <- 0
+
+
 d1 <- filter(df, polity2 > 0)
 
-X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
+X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban)
 
-BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
-                       I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
+BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, 
+                       d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1),
+                       I(d1$GDP_UN*d1$menergy), I(d1$GDP_UN*d1$mindustry), 
+                       I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), 
+                       I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
 
-gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 10, print.level = 0, unif.seed=3392, int.seed=8282)
 
-mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
-summary(mgen1)
+tophalf <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 1000, print.level = 0, unif.seed=3392, int.seed=8282)
+
+tophalft <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = tophalf)
+summary(tophalft)
 
 #at or below 0
-d1 <- filter(df, polity2 <= 0, polity2 > -6)
+d1 <- filter(df, polity2 < 0, polity2 > -6)
 
 X <- select(d1, GDP_UN, pop1, menergy, mindustry, murban) 
 
 BalanceMatrix <- cbind(d1$GDP_UN, d1$pop1, d1$menergy, d1$mindustry, d1$murban, I(d1$GDP_UN*d1$pop1), I(d1$GDP_UN*d1$menergy),
                        I(d1$GDP_UN*d1$mindustry), I(d1$GDP_UN*d1$murban), I(d1$pop1*d1$murban), I(d1$murban*d1$mindustry),I(d1$pop1*d1$mindustry))
 
-gen1 <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 100, print.level = 0, unif.seed=3392, int.seed=8282)
+lowerhalf <- GenMatch(Tr = d1$sanctions, X = X, BalanceMatrix = BalanceMatrix, pop.size = 1000, print.level = 0, unif.seed=3392, int.seed=8282)
 
-mgen1 <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = gen1)
-summary(mgen1)
+lowerhalft <- Match(Y = d1$polity2, Tr = d1$sanctions, X = X, Weight.matrix = lowerhalf)
+summary(lowerhalft)
 
